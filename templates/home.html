@@ -1,0 +1,85 @@
+{% extends "_base.html" %} {% load custom_function %} {% load static %} {% block title %}
+<title>OverToonZ Home</title>
+{% endblock title %} {% block content %}
+<body class="bgbodymain container font-Roboto">
+  {% include 'nav.html' %}
+  <div class="container text-center mt-4 mb-2 p-2 w-100 mx-auto">
+    <div class="position-relative">
+      <img
+        src="https://res.cloudinary.com/dfnyx3fob/image/upload/t_Banner%20/v1726323833/naruto-4k-anbu-itachi-8r6z1hzxwyui3jt2_njcl6o.webp"
+        class="img-fluid h-50 w-100"
+        alt="Banner Image"
+      />
+      <div class="text-center element-centre p-3 fw-bold text-white bg-secondary" style="--bs-bg-opacity: 0.3">
+        <div class="text">Welcome to OverToonZ</div>
+      </div>
+    </div>
+    <div class="text-muted text-center text px-3 py-2 fw-semibold">
+      <strong class="text-black fw-bold">Dive into the world of anime with us! </strong><br />
+      Stay updated with your favorite series, discover hidden gems, and connect with fellow fans. Your anime adventure starts here!
+    </div>
+  </div>
+
+  <br />
+
+  <div class="container">
+    <div class="text-start text-lg bg-grad-primary-home text-white px-2 m-0 rounded">Recently Added</div>
+    <div class="row flex-nowrap homeoverflow-auto align-items-stretch">
+      {% if data %} {% for timestamp, details in data.items %}
+
+      <div class="col-6 col-sm-4 col-md-3 col-lg-2 d-flex my-1">
+        {% if details.Type == "Anime" %}
+        <a href="{% url 'anime' %}">
+          {% elif details.Type == "Season" %}
+          <a href="{% url 'seasons' details.Name|replace_to_hypen %}">
+            {% elif details.Type == "Episode" %}
+            <a href="{% url 'episodes' details.Name|replace_to_hypen details.Season %}">
+              {% endif %}
+              <div class="homecard card text-center" id="">
+                <div class="card-body w-100 border-0 m-0 p-0 position-relative bg-white">
+                  <img src="{{ details.Img }}" class="card-img-top object-fit-cover" alt="Image" />
+                  <div class="position-absolute bottom-0 w-100 text-center bg-dark bg-opacity-50">
+                    <h5 class="card-title my-1 text-base pb-1 text-white">{{details.Name}}</h5>
+                    <h5 class="card-title my-1 text pb-1 text-white">{{details.Type}} Added</h5>
+                  </div>
+                </div>
+
+                <div class="card-footer m-0 p-1 text-black-50 text-xs"><i class="fa-solid fa-clock"></i> {{ timestamp|timealert }}</div>
+              </div>
+              {% if details.Type == "Anime" %}
+            </a>
+            {% elif details.Type == "Season" %}
+          </a>
+          {% elif details.Type == "Episode" %}
+        </a>
+        {% endif %}
+      </div>
+      {% endfor %} {% else %}
+      <div class="text-center p-4 text-muted text-lg">No Recently Added</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="container mt-3">
+    <div class="text-start text-lg bg-grad-primary-home text-white px-2 m-0 rounded">Top Recommendations</div>
+    <div class="row flex-nowrap homeoverflow-auto align-items-stretch">
+      {% for picks in toppicks %}
+      <div class="col-6 col-sm-4 col-md-3 col-lg-2 d-flex my-1">
+        <a href="{% url 'seasons' picks.anime.title|replace_to_hypen  %}">
+          <div class="homecard card text-center" id="">
+            <div class="card-body w-100 border-0 m-0 p-0 position-relative bg-white">
+              <img src="{{ picks.anime.img_src }}" class="card-img-top object-fit-cover" alt="Image" />
+              <div class="position-absolute bottom-0 w-100 text-center bg-dark bg-opacity-50">
+                <h5 class="card-title my-1 text-base pb-1 text-white">{{ picks.anime.title }}</h5>
+                <h5 class="card-title my-1 text-sm pb-1 text-white"><i class="fa-solid fa-star"></i> {{ picks.anime.rating|str_of }} / 100</h5>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</body>
+
+{% endblock content %}

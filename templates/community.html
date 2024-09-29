@@ -1,0 +1,191 @@
+{% extends "_base.html" %} {% load static %} {% load custom_function %} {% block title %}
+<title>Community Forum</title>
+{% endblock title %} {% block content %}
+<body class="bgbodymain container font-Roboto">
+  {% include 'nav.html' %}
+
+  <ul class="nav nav-tabs my-3" id="myTab" role="tablist">
+    <li class="nav-item">
+      <a
+        class="nav-link active"
+        id="discussion-tab"
+        data-bs-toggle="tab"
+        href="#discussion"
+        role="tab"
+        aria-controls="discussion"
+        aria-selected="true"
+        >Discussion</a
+      >
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="issues-tab" data-bs-toggle="tab" href="#issues" role="tab" aria-controls="issues" aria-selected="false">Issues</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="others-tab" data-bs-toggle="tab" href="#others" role="tab" aria-controls="others" aria-selected="false">Others</a>
+    </li>
+  </ul>
+
+  <div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="discussion" role="tabpanel" aria-labelledby="discussion-tab">{% include "discussion.html" %}</div>
+
+    <div class="tab-pane fade" id="issues" role="tabpanel" aria-labelledby="issues-tab">{% include "issues.html" %}</div>
+
+    <div class="tab-pane fade" id="others" role="tabpanel" aria-labelledby="others-tab">{% include "others.html" %}</div>
+  </div>
+
+  <script>
+    $(document).ready(function () {
+      // $('a[data-bs-toggle="tab"]').on("shown.bs.tab", function (e) {
+      //   // Remove 'active' class from all tabs
+      //   $(".nav-link").removeClass("active");
+      //   // Add 'active' class to the clicked tab
+      //   $(e.target).addClass("active");
+      // });
+      var activeTab = localStorage.getItem("activeTab");
+      if (activeTab) {
+        $('.nav-tabs a[href="' + activeTab + '"]').tab("show");
+      }
+
+      // Store the active tab in local storage when a tab is clicked
+      $(".nav-tabs a").on("shown.bs.tab", function (e) {
+        var tabName = $(e.target).attr("href");
+        localStorage.setItem("activeTab", tabName);
+      });
+      $(".Adminreply").click(function () {
+        var commentid = $(this).attr("id");
+        var reply = "replydiv_" + commentid.split("_")[1];
+        if ($(`#${reply}`).hasClass("d-none")) {
+          $(`#${reply}`).removeClass("d-none");
+        } else {
+          $(`#${reply}`).addClass("d-none");
+        }
+      });
+      $(".send").click(function () {
+        var commentid = $(this).attr("id");
+
+        if (commentid.split("_")[0] === "send") {
+          var replyid = "AdRepl_" + commentid.split("_")[1];
+          var replydiv = "replydiv_" + commentid.split("_")[1];
+          var reply = $(`#${replyid}`).val();
+          $(`#${replyid}`).val(" ");
+          $(`#${replydiv}`).addClass("d-none");
+
+          const info = {
+            msgid: commentid.split("_")[1],
+            reply: reply,
+          };
+          $.ajax({
+            url: "",
+            type: "POST",
+            data: {
+              data: JSON.stringify(info),
+              purpose: "sendreply",
+              csrfmiddlewaretoken: "{{ csrf_token }}",
+            },
+            success: function () {
+              location.reload();
+            },
+            error: function () {},
+          });
+        } else {
+          if (commentid.split("_")[0] === "Usersend") {
+            var send = "Usersend_" + commentid.split("_")[1];
+            $(`#${send}`).addClass("d-none");
+            var input = "MsgBox_" + commentid.split("_")[1];
+            var act = "UserEdit";
+            var change = $(`#${input}`).val();
+            $(`#${input}`).attr("readonly", true);
+          } else {
+            var send = "Adminsend_" + commentid.split("_")[1];
+            $(`#${send}`).addClass("d-none");
+            var input = "AdMsgBox_" + commentid.split("_")[1];
+            var change = $(`#${input}`).val();
+            var act = "AdminEdit";
+            $(`#${input}`).attr("readonly", true);
+            $(`#${input}`).css("width", "100%");
+          }
+          const info = {
+            msgid: commentid.split("_")[1],
+            reply: change,
+            act: act,
+          };
+          $.ajax({
+            url: "",
+            type: "POST",
+            data: {
+              data: JSON.stringify(info),
+              purpose: "discussmodify",
+              csrfmiddlewaretoken: "{{ csrf_token }}",
+            },
+            success: function () {},
+            error: function () {},
+          });
+        }
+      });
+      $(".UserEdit").click(function () {
+        var commentid = $(this).attr("id");
+        var input = "MsgBox_" + commentid.split("_")[1];
+        var send = "Usersend_" + commentid.split("_")[1];
+        if ($(`#${input}`).attr("readonly") !== undefined) {
+          $(`#${input}`).removeAttr("readonly");
+          $(`#${send}`).removeClass("d-none");
+        } else {
+          $(`#${input}`).attr("readonly", true);
+          $(`#${send}`).addClass("d-none");
+        }
+      });
+      $(".AdminEdit").click(function () {
+        var commentid = $(this).attr("id");
+        var input = "AdMsgBox_" + commentid.split("_")[1];
+        var send = "Adminsend_" + commentid.split("_")[1];
+
+        if ($(`#${input}`).attr("readonly") !== undefined) {
+          $(`#${input}`).removeAttr("readonly");
+          $(`#${send}`).removeClass("d-none");
+          $(`#${input}`).css("width", "95%");
+        } else {
+          $(`#${input}`).attr("readonly", true);
+          $(`#${send}`).addClass("d-none");
+          $(`#${input}`).css("width", "100%");
+        }
+      });
+      $(".AdminDel").click(function () {
+        var commentid = $(this).attr("id");
+
+        var msgid = commentid.split("_")[1];
+
+        $.ajax({
+          url: "",
+          type: "POST",
+          data: {
+            data: msgid,
+            purpose: "delReply",
+            csrfmiddlewaretoken: "{{ csrf_token }}",
+          },
+          success: function () {
+            location.reload();
+          },
+          error: function () {},
+        });
+      });
+      $(".ComDel").click(function () {
+        var commentid = $(this).attr("id");
+        var msgid = commentid.split("_")[1];
+        $.ajax({
+          url: "",
+          type: "POST",
+          data: {
+            data: msgid,
+            purpose: "delComment",
+            csrfmiddlewaretoken: "{{ csrf_token }}",
+          },
+          success: function () {
+            location.reload();
+          },
+          error: function () {},
+        });
+      });
+    });
+  </script>
+</body>
+{% endblock content %}

@@ -1,0 +1,89 @@
+{% extends "_base.html" %} {% load static %} {% block title %}
+<title>OverToonZ Login</title>
+{% endblock title %} {% block content %}
+<body class="bgbody container font-Roboto">
+  <header class="container">
+    <div class="d-flex align-items-center justify-content-center">
+      <div class="p-2 me-auto">
+        <a href="{% url 'intro' %}"> <i class="text-danger fa-solid fa-person-walking-arrow-right fa-flip-horizontal fa-2xl"></i></a>
+      </div>
+      <div class="me-auto">
+        <img class="logo" src="{% static 'img/BrightLogo.png' %}" alt="OverToonZ" />
+      </div>
+    </div>
+  </header>
+  <div class="mx-auto card card-block border-0" style="background-color: rgb(244, 249, 250)">
+    <form action="" method="post" class="justify-content-center mx-2 my-2">
+      <legend class="mb-1 text-center p-2 mt-3"><span class="bg-primary text-white py-1 px-3"> User Login </span></legend>
+      <!-- UserName -->
+      {% csrf_token %}
+
+      <div class="row justify-content-center">
+        <div class="col-11 col-sm-10 col-md-8 col-lg-6 mb-1 mt-3 outline-0">
+          <div class="form-floating text-center mx-auto">
+            <input
+              type="email"
+              class="form-control form-control-flush input-style border-0 border-bottom border-3 border-primary"
+              id="mail"
+              placeholder="Enter Email"
+              name="email"
+              required
+            />
+            <label for="mail" class="form-label"> Email Address </label>
+          </div>
+          <div class="text-danger fs-6 pl-3 py-1">{{ err_msg1 }}</div>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-11 col-sm-10 col-md-8 col-lg-6 mb-1 mt-3 outline-0">
+          <div class="form-floating text-center mx-auto">
+            <input
+              type="password"
+              class="form-control form-control-flush input-style border-0 border-bottom border-3 border-primary"
+              id="pwd"
+              placeholder="Enter Password"
+              name="password"
+              required
+            />
+            <label for="pwd" class="form-label"> Password </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-center mt-4 mb-2">
+        <button type="submit" class="ms-1 me-5 bg-primary text-white p-2 rounded border-0 px-2">Login</button>
+        <button type="reset" class="mx-1 bg-danger text-white p-2 rounded border-0 px-2">Cancel</button>
+      </div>
+    </form>
+    <div>
+      <p class="text-center text-black mt-2">
+        You don't have an account <span class="text-primary"><a href="{% url 'signup' %}">Create New</a></span>
+      </p>
+    </div>
+  </div>
+
+  <p class="text-center mt-3 text-secondary">OR</p>
+
+  <section
+    class="row mt-3 align-items-center mb-2 card card-block border-0 mx-auto text-center py-2"
+    style="background-color: rgba(255, 255, 255, 0)"
+  >
+    <div class="font-Roboto">
+      <p class="text-center">If you don't want additional features and community forum, you can login as guest.</p>
+      <p class="text-center">It has limited functionalities</p>
+    </div>
+    <div class="my-2">
+      <a href="{% url 'home' %}"> <button type="button" class="bg-secondary text-white rounded py-2 px-3 border-0">As Guest</button></a>
+    </div>
+    <div>
+      <i> <span class="text-danger">**</span> Guest Login has no Credentials</i>
+    </div>
+  </section>
+
+  <footer class="d-flex flex-column align-items-center justify-content-center h-32 my-5 fs-5">
+    <div class="pr-3">2024, OverToonZ -</div>
+
+    <div class="">Made with <i class="fa-solid fa-heart text-danger pr-2"> </i> for Anime Fans</div>
+  </footer>
+</body>
+{% endblock content %}

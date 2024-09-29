@@ -1,0 +1,546 @@
+{% load static %}
+
+<div class="container-fluid">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light text-sm">
+    <div class="container-fluid">
+      <button type="button" class="navbar-toggler text-sm mx-1 border-0 btn-none" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a href="{% url 'home' %}" class="navbar-brand"><img class="logo" src="{% static 'img/BrightLogo.png' %}" alt="OverToonZ" /></a>
+
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <div class="navbar-nav">
+          <a href="{% url 'home' %}" class="nav-item nav-link text-primary text-base mx-1"><i class="fa-solid fa-house fa-sm"></i> Home</a>
+          <a href="{% url 'anime' %}" class="nav-item nav-link text-primary text-base mx-1"><i class="fa-solid fa-tv fa-sm"></i> Anime</a>
+          {% if user.is_authenticated %}
+          <a href="{% url 'community' %}" class="nav-item nav-link text-primary text-base mx-1">
+            <i class="fa-solid fa-people-group fa-sm"></i> Community Forum</a
+          >
+          {% endif %} {% if user.is_superuser %}
+          <div class="nav-item dropdown mx-1">
+            <a href="#" class="nav-link dropdown-toggle text-primary text-base" data-bs-toggle="dropdown"
+              ><i class="fa-solid fa-user-tie fa-sm"></i> Admin</a
+            >
+            <div class="dropdown-menu bg-white">
+              <a href="{% url 'analytics' %}" class="drop dropdown-item text-primary text-sm">
+                <i class="fa-solid fa-chart-pie fa-sm"></i> Analytics</a
+              >
+              <a href="{% url 'operations' %}" class="drop dropdown-item text-primary text-sm"><i class="fa-solid fa-server fa-sm"></i> Anime DB</a>
+              <a href="{% url 'storage' %}" class="drop dropdown-item text-primary text-sm">
+                <i class="fa-solid fa-floppy-disk fa-sm"></i> Storage Info</a
+              >
+            </div>
+          </div>
+          <a href="#" class="nav-item nav-link text-primary text-base mx-1" tabindex="-1"
+            ><i class="fa-regular fa-file-lines fa-sm"></i> Log Reports</a
+          >
+          {% endif %}
+        </div>
+        <div class="navbar-nav dropdown ms-auto px-lg-5">
+          <a href="#" class="nav-item nav-link text-secondary text-base dropdown-toggle" data-bs-toggle="dropdown">
+            <i class="fa-solid fa-circle-user fa-lg"></i> Profile
+          </a>
+          <div class="dropdown-menu dropdown-menu-lg-start">
+            <div class="text-center my-2">
+              <img class="logo" src="{% static 'img/avatar.jpg' %}" alt="Avatar" />
+              <p class="text-muted text-center text-xs fw-bold">{{ userinfo.username }}</p>
+            </div>
+            <hr class="dropdown-divider m-0 px-2 my-1 text-center mx-auto" />
+            <a href="#" class="dropdown-item text-black text-sm" data-bs-toggle="modal" data-bs-target="#MyAccount">
+              <i class="fa-regular fa-id-card fa-sm"></i> My Account
+            </a>
+            <a href="#" class="dropdown-item text-black text-sm" data-bs-toggle="modal" data-bs-target="#ChangePwd">
+              <i class="fa-solid fa-key fa-sm"></i> Change Password
+            </a>
+            <a href="#" class="dropdown-item text-danger text-sm" data-bs-toggle="modal" data-bs-target="#DeleteUser">
+              <i class="fa-solid fa-trash fa-sm"></i> Delete User
+            </a>
+
+            <hr class="dropdown-divider m-0 px-2 my-1 text-center mx-auto" />
+            <a href="{% url 'logoutUser' %}" class="dropdown-item text-danger text-sm">
+              <i class="fa-solid fa-person-running text-danger"></i> Logout
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- User Details  -->
+  <div
+    class="modal fade"
+    id="MyAccount"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="account"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="account">My Account</h5>
+          <button type="button" class="btn-close text-danger" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body mx-3 mb-1 overflow-hidden">
+          <!-- Toast Container -->
+          <div aria-live="polite" aria-atomic="true" class="position-relative">
+            <!-- Position it -->
+            <div class="toast-container position-absolute p-3 border-1" style="top: 0; right: 50">
+              <!-- Toast -->
+              <div id="alerttoast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header" id="toasttitle">
+                  <strong class="me-auto" id="Toasthead">Bootstrap 5</strong>
+                  <small class="text-muted">Just now</small>
+                  <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body" id="ToastMsg"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-end px-2">
+            <button class="btn obtn" id="edit"><i id="editlogo" class="fa-solid fa-user-pen text-primary outline-0"></i></button>
+          </div>
+
+          <div class="text-center m-0"><img class="logo h-25 w-25" src="{% static 'img/avatar.jpg' %}" alt="Avatar" /></div>
+          <div class="row m-0">
+            <form action="#" method="post">
+              <div class="row">
+                <div class="mb-1 col-12 col-lg-6">
+                  <label for="accname" class="form-label text-primary fw-bold text-base mb-0"
+                    ><i class="fa-regular fa-id-card"></i> User Name <i class="fa-solid fa-pen text-success text-xs px-1 pen d-none"></i
+                  ></label>
+                  <div class="col px-lg-5 px-3">
+                    <input type="text" readonly class="form-control-plaintext editable" name="UserName" id="accname" value="HawkToonZ" />
+                  </div>
+                </div>
+
+                <div class="mb-1 col-12 col-lg-6">
+                  <label for="Useremail" class="form-label text-primary fw-bold text-base mb-0"
+                    ><i class="fa-solid fa-envelope"></i> Email <i class="fa-solid fa-pen text-success text-xs px-1 pen d-none"></i
+                  ></label>
+                  <div class="col px-lg-5 px-3">
+                    <input
+                      type="email"
+                      readonly
+                      class="form-control-plaintext editable"
+                      name="UserEmail"
+                      id="Useremail"
+                      value="HawkToonZ@gmail.com"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="mb-1 col-5 col-lg-6">
+                  <label for="UserRole" class="form-label text-primary fw-bold text-base mb-0"><i class="fa-solid fa-briefcase"></i> Role</label>
+                  <div class="col px-lg-5 px-3">
+                    <input type="text" class="form-control-plaintext" id="UserRole" value="User" disabled />
+                  </div>
+                </div>
+                <div class="mb-1 col-7 col-lg-6">
+                  <label for="Userpassword" class="form-label text-primary fw-bold text-base mb-0"
+                    ><i class="fa-solid fa-key"></i> Password <i class="fa-solid fa-pen text-success text-xs px-1 pen d-none"></i
+                  ></label>
+                  <div class="col px-lg-5 px-3">
+                    <input type="password" readonly class="form-control-plaintext editable" name="NewPassword" id="Userpassword" value="********" />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="mb-1 col">
+                  <label for="FvrAnime" class="form-label text-primary fw-bold text-base mb-0"
+                    ><i class="fa-solid fa-heart"></i> Favorite Anime <i class="fa-solid fa-pen text-success text-xs px-1 pen d-none"></i
+                  ></label>
+                  <div class="col px-lg-5 px-3">
+                    <input
+                      type="text"
+                      readonly
+                      class="form-control-plaintext editable"
+                      id="FvrAnime"
+                      name="FavoriteAnime"
+                      value="Solo Leveling, Naruto"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="mb-1 col-6">
+                  <label for="Joined" class="form-label text-primary fw-bold text-base mb-0"
+                    ><i class="fa-solid fa-calendar-days"></i> Date Joined</label
+                  >
+                  <div class="col px-lg-5 px-3">
+                    <input type="text" class="form-control-plaintext" id="Joined" value="12/02/2012" disabled />
+                  </div>
+                </div>
+                <div class="mb-1 col-6 position-relative">
+                  <label for="lastLogin" class="form-label text-primary fw-bold text-base mb-0"
+                    ><i class="fa-solid fa-clock"></i> Last Login <span id="logcount" class="position-absolute badge text-danger">4</span>
+                  </label>
+                  <div class="col px-lg-5 px-3">
+                    <input type="text" class="form-control-plaintext" id="lastLogin" value="12/02/2012" disabled />
+                  </div>
+                </div>
+              </div>
+              <input
+                type="hidden"
+                id="userData"
+                data-username="{{ userinfo.username }}"
+                data-email="{{ userinfo.email }}"
+                data-favorite="{{ userinfo.favourite_anime }}"
+                data-role="{{ userinfo.role }}"
+                data-joined="{{ userinfo.date_joined }}"
+                data-login="{{ userinfo.last_login }}"
+                data-logincount="{{ userinfo.login_count }}"
+              />
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer d-flex justify-content-center">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+          <button type="button" id="save" name="editsave" class="btn btn-success">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Change Password -->
+  <div
+    class="modal fade"
+    id="ChangePwd"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="passwordChanger"
+    aria-hidden="true"
+  >
+    <form action="#" method="post" id="changePswd">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="passwordChanger">Change Password</h5>
+            <button type="button" class="btn-close text-danger" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body mx-3 mb-1 overflow-hidden">
+            <!-- Toast Container -->
+            <div aria-live="polite" aria-atomic="true" class="position-relative">
+              <!-- Position it -->
+              <div class="toast-container position-absolute p-3 border-1" style="top: 0; right: 0">
+                <!-- Toast -->
+                <div id="alerttoastCP" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                  <div class="toast-header">
+                    <strong class="me-auto" id="ToastheadCP"></strong>
+                    <small class="text-muted">Just now</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                  </div>
+                  <div class="toast-body" id="ToastMsgCP"></div>
+                </div>
+              </div>
+            </div>
+            <div class="row m-0">
+              <div class="row">
+                <div class="mb-2 col-12 col-lg-6">
+                  <label for="OldPasscode" class="form-label text-primary text-base mb-0"> Old Password </label>
+                  <div class="col d-flex px-3 align-items-center position-relative">
+                    <input type="password" class="form-control" name="oldPassword" id="OldPasscode" value="" required autocomplete="on" />
+                    <i
+                      class="passtoggle fa-solid fa-eye px-1 position-absolute text-secondary"
+                      data-target="#OldPasscode"
+                      id="oldPassicon"
+                      style="right: 5%"
+                    ></i>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="mb-2 col-12 col-lg-6">
+                  <label for="Passcode" class="form-label text-primary text-base mb-0"> New Password </label>
+                  <div class="col d-flex px-3 align-items-center position-relative">
+                    <input type="password" class="form-control" name="Password" id="Passcode" value="" required autocomplete="on" />
+                    <i
+                      class="passtoggle fa-solid fa-eye px-1 position-absolute text-secondary"
+                      data-target="#Passcode"
+                      id="passicon"
+                      style="right: 5%"
+                    ></i>
+                  </div>
+                </div>
+
+                <div class="mb-2 col-12 col-lg-6">
+                  <label for="cpasscode" class="form-label text-primary text-base mb-0"> Confirm Password </label>
+                  <div class="col d-flex px-3 align-items-center position-relative">
+                    <input type="password" class="form-control" name="ConfirmPassword" id="cpasscode" value="" required autocomplete="on" />
+                    <i
+                      class="passtoggle fa-solid fa-eye px-1 position-absolute text-secondary"
+                      data-target="#cpasscode"
+                      id="CPicon"
+                      style="right: 5%"
+                    ></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer d-flex justify-content-center">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            <button type="button" id="CPsave" name="editsave" class="btn btn-success">Change Password</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <!-- Delete User -->
+  <div
+    class="modal fade"
+    id="DeleteUser"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="deluser"
+    aria-hidden="true"
+  >
+    <form action="#" method="post">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title text-danger" id="del">Delete User</h5>
+            <button type="button" class="btn-close text-danger" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body mx-3 mb-1 overflow-hidden">
+            <!-- Toast Container -->
+            <div aria-live="polite" aria-atomic="true" class="position-relative">
+              <!-- Position it -->
+              <div class="toast-container position-absolute p-3 border-1" style="top: 100; right: 0">
+                <!-- Toast -->
+                <div id="alerttoastDA" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                  <div class="toast-header">
+                    <strong class="me-auto" id="ToastheadDU"></strong>
+                    <small class="text-muted">Just now</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                  </div>
+                  <div class="toast-body" id="ToastMsgDU"></div>
+                </div>
+              </div>
+            </div>
+            <div class="row m-0">
+              <div class="row">
+                <div class="mb-1 col-12 col-lg-6">
+                  <label for="delname" class="form-label text-primary fw-bold text-base mb-0"><i class="fa-regular fa-id-card"></i> User Name </label>
+                  <div class="col px-lg-5 px-3">
+                    <input type="text" readonly class="form-control-plaintext" name="UserName" id="delname" value="HawkToonZ" />
+                  </div>
+                </div>
+
+                <div class="mb-1 col-12 col-lg-6">
+                  <label for="delemail" class="form-label text-primary fw-bold text-base mb-0"><i class="fa-solid fa-envelope"></i> Email </label>
+                  <div class="col px-lg-5 px-3">
+                    <input type="email" readonly class="form-control-plaintext" name="UserEmail" id="delemail" value="HawkToonZ@gmail.com" />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="mb-2 col-12 col-lg-6">
+                  <label for="entPasscode" class="form-label text-primary text-base fw-bold mb-0"
+                    ><i class="fa-solid fa-key"></i> Enter Password
+                  </label>
+                  <div class="col d-flex px-3 align-items-center position-relative">
+                    <input
+                      type="password"
+                      class="form-control-plaintext border-bottom"
+                      name="oldPassword"
+                      id="entPasscode"
+                      value=""
+                      required
+                      autocomplete="on"
+                    />
+                    <i
+                      class="passtoggle fa-solid fa-eye px-1 position-absolute text-secondary"
+                      data-target="#entPasscode"
+                      id="entPasscodeicon"
+                      style="right: 5%"
+                    ></i>
+                  </div>
+                </div>
+              </div>
+              <input type="hidden" id="deluserData" data-username="{{ userinfo.username }}" data-email="{{ userinfo.email }}" />
+            </div>
+          </div>
+          <div class="modal-footer d-flex justify-content-center">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            <button type="button" id="Delete" name="editsave" class="btn btn-success">Delete</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function () {
+    var toastElm1 = $("#alerttoast");
+    var toastElm2 = $("#alerttoastCP");
+    var toastElm3 = $("#alerttoastDA");
+    var accounttoast = new bootstrap.Toast(toastElm1);
+    var passwordtoast = new bootstrap.Toast(toastElm2);
+    var deletetoast = new bootstrap.Toast(toastElm3);
+    if ($("#userData").length) {
+      var username = $("#userData").data("username");
+      var email = $("#userData").data("email");
+      var role = $("#userData").data("role");
+      var favourite = $("#userData").data("favorite");
+      var joined = $("#userData").data("joined");
+      var login = $("#userData").data("login");
+      var loginCount = $("#userData").data("logincount");
+      $("#accname").val(username);
+      $("#Useremail").val(email);
+      $("#UserRole").val(role);
+      $("#FvrAnime").val(favourite);
+      $("#Joined").val(joined);
+      $("#lastLogin").val(login);
+      $("#logcount").html(loginCount);
+      $("#delname").val(username);
+      $("#delemail").val(email);
+    }
+    $("#edit").click(function () {
+      var $input = $(".editable");
+      console.log($input);
+      if ($input.attr("readonly") !== undefined) {
+        $(".editable").removeAttr("readonly");
+        $(".pen").removeClass("d-none");
+        $("#editlogo").removeClass("fa-solid fa-user-pen text-primary");
+        $("#editlogo").addClass("fa-regular fa-rectangle-xmark text-danger");
+      } else {
+        $(".editable").attr("readonly", "readonly");
+        $(".pen").addClass("d-none");
+        $("#editlogo").addClass("fa-solid fa-user-pen text-primary");
+        $("#editlogo").removeClass("fa-regular fa-rectangle-xmark text-danger");
+      }
+    });
+    $("#save").click(function () {
+      const info = {
+        username: $("#accname").val(),
+        email: $("#Useremail").val(),
+        pass: $("#Userpassword").val(),
+        favourite: $("#FvrAnime").val(),
+      };
+
+      $.ajax({
+        url: '{% url "setup" %}',
+        type: "POST",
+        data: {
+          editinfo: JSON.stringify(info),
+          purpose: "accountsetup",
+          csrfmiddlewaretoken: "{{ csrf_token }}",
+        },
+        success: function () {
+          $("#ToastMsg").html("User details updated successfully.");
+          $("#ToastMsg").addClass("text-success text-sm");
+          $("#Toasthead").addClass("text-success text-base");
+          $("#Toasthead").html("Done Success ");
+
+          accounttoast.show();
+          $(".editable").attr("readonly", "readonly");
+          $(".pen").addClass("d-none");
+          $("#editlogo").addClass("fa-solid fa-user-pen text-primary");
+          $("#editlogo").removeClass("fa-regular fa-rectangle-xmark text-danger");
+        },
+        error: function () {
+          $("#ToastMsg").html("User details updated failed.");
+          $("#ToastMsg").addClass("text-danger text-sm");
+          $("#Toasthead").addClass("text-danger text-base ");
+          $("#Toasthead").html("Done Failed ");
+
+          accounttoast.show();
+        },
+      });
+    });
+    $("#CPsave").click(function () {
+      const info = {
+        oldpasscode: $("#OldPasscode").val(),
+        passcode: $("#Passcode").val(),
+        confirm_passcode: $("#cpasscode").val(),
+      };
+
+      $.ajax({
+        url: '{% url "setup" %}',
+        type: "POST",
+        data: {
+          codeinfo: JSON.stringify(info),
+          purpose: "passcodesetup",
+          csrfmiddlewaretoken: "{{ csrf_token }}",
+        },
+        success: function () {
+          $("#ToastMsgCP").html("Password successfully Changed.");
+          $("#ToastMsgCP").addClass("text-success text-sm");
+          $("#ToastheadCP").addClass("text-success text-base");
+          $("#ToastheadCP").html("Done Successfully ");
+
+          passwordtoast.show();
+          $("#changePswd")[0].reset();
+        },
+        error: function () {
+          $("#ToastMsgCP").html("Password changing process failed.");
+          $("#ToastMsgCP").addClass("text-danger text-sm");
+          $("#ToastheadCP").addClass("text-danger text-base ");
+          $("#ToastheadCP").html("Done Failed ");
+
+          passwordtoast.show();
+        },
+      });
+    });
+    $(".passtoggle").click(function () {
+      const targetId = this.getAttribute("data-target");
+      const passwordField = document.querySelector(targetId);
+      const toggleIcon = this;
+
+      if (passwordField.type === "password") {
+        passwordField.type = "text";
+        toggleIcon.classList.remove("fa-eye");
+        toggleIcon.classList.add("fa-eye-slash");
+      } else {
+        passwordField.type = "password";
+        toggleIcon.classList.remove("fa-eye-slash");
+        toggleIcon.classList.add("fa-eye");
+      }
+    });
+    $("#Delete").click(function () {
+      const info = {
+        user: $("#delname").val(),
+        passcode: $("#entPasscode").val(),
+        email: $("#delemail").val(),
+      };
+
+      $.ajax({
+        url: '{% url "setup" %}',
+        type: "POST",
+        data: {
+          delinfo: JSON.stringify(info),
+          purpose: "deletesetup",
+          csrfmiddlewaretoken: "{{ csrf_token }}",
+        },
+        success: function () {
+          $("#ToastMsgDU").html("User deleted and You are now logging out.");
+          $("#ToastMsgDU").addClass("text-success text-sm");
+          $("#ToastheadDU").addClass("text-success text-base");
+          $("#ToastheadDU").html("Done Successfully ");
+
+          deletetoast.show();
+          $("#entPasscode").val($("#entPasscode").prop("defaultValue"));
+          setTimeout(function () {
+            redirect_url = "{% url 'signup' %}";
+            console.log(redirect_url);
+            window.location.href = redirect_url;
+          }, 3000);
+        },
+        error: function () {
+          $("#ToastMsgDU").html("User deletion failed. Check your Password");
+          $("#ToastMsgDU").addClass("text-danger text-sm");
+          $("#ToastheadDU").addClass("text-danger text-base ");
+          $("#ToastheadDU").html("Done Failed ");
+
+          deletetoast.show();
+        },
+      });
+    });
+  });
+</script>

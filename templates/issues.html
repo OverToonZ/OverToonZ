@@ -1,0 +1,221 @@
+{% load custom_function %}
+<div class="card">
+  <div class="card-header fw-bold text-sm">Issues</div>
+  <div class="card-body">
+    <!-- Generting -->
+    {% for msg in IssuesMsg %} {% if msg.visibility == "Public" %}
+    <div class="my-1 p-2 border bg-public">
+      <div class="text-start ms-3">
+        <h5 class="card-title">
+          <span class="fw-bold text-sm text-orangefamily">{{msg.user.username}}</span>
+          <span class="text-xs text-black-50">
+            <i class="fa-solid fa-clock"></i> {{msg.Updated_time}} &nbsp;<i class="fa-solid fa-earth-americas"></i
+          ></span>
+        </h5>
+        <div class="input-group position-relative">
+          <input
+            type="text"
+            class="ps-2 text-sm my-0 pe-2 form-control-plaintext w-75"
+            value="{{msg.comment}}"
+            id="{{ 'MsgBox'|id_Concat:msg.id }}"
+            readonly
+          />
+          <i
+            class="send fa-solid fa-paper-plane input-group-text px-2 text-sm bg-success text-white d-none"
+            id="{{ 'Usersend'|id_Concat:msg.id }}"
+          ></i>
+        </div>
+        <!-- <input class="card-text ps-2 text-sm my-0 form-control-plaintext" value="{{msg.comment}}" id="{{ 'MsgBox'|id_Concat:msg.id }}" readonly /> -->
+        <div class="d-flex mx-2 text-muted my-1 text-xs">
+          {% if msg.user == request.user %}
+
+          <div class="UserEdit px-2 hover-effect" id="{{ 'Edit'|id_Concat:msg.id }}"><i class="fa-solid fa-pen"></i></div>
+          <div class="ComDel px-2 hover-effect text-danger" id="{{ 'Del'|id_Concat:msg.id }}"><i class="fa-solid fa-trash-can"></i></div>
+          {% endif %} {% if user.is_superuser %}
+          <div class="Adminreply px-2 hover-effect" id="{{ 'Rep'|id_Concat:msg.id }}"><i class="fa-solid fa-reply"></i></div>
+
+          {% endif %}
+        </div>
+        {% if user.is_superuser %}
+
+        <div class="mx-2 d-flex text-sm align-items-center w-75 my-2 d-none" id="{{ 'replydiv'|id_Concat:msg.id }}">
+          <div class="input-group position-relative">
+            <input type="text" class="form-control ps-4 pe-2 text-sm border-0 border-bottom border-success" id="{{ 'AdRepl'|id_Concat:msg.id }}" />
+            <i
+              class="send fa-solid fa-paper-plane input-group-text end-0 px-2 me-3 text-sm bg-success text-white"
+              id="{{ 'send'|id_Concat:msg.id }}"
+            ></i>
+          </div>
+          <label for="{{ 'AdRepl'|id_Concat:msg.id }}" class="form-label text-sm text-success fw-bold position-absolute px-1 mx-2">Reply</label>
+        </div>
+        {% endif %}
+      </div>
+      {% if not msg.reply %} {% else %}
+      <div class="text-end me-3" id="reply">
+        <h5 class="card-title">
+          <span class="fw-bold text-sm text-success">OverToonZ Admin</span>
+          <span class="text-xs text-black-50"> <i class="fa-solid fa-clock"></i> {{ msg.reply.time|timealert }} </span>
+        </h5>
+        <div class="text-end input-group position-relative">
+          <input
+            type="text"
+            class="ps-2 text-sm my-0 pe-2 form-control-plaintext"
+            value="{{ msg.reply.msg }}"
+            id="{{ 'AdMsgBox'|id_Concat:msg.id }}"
+            readonly
+            style="text-align: end; width: 100%"
+          />
+          <i
+            class="send fa-solid fa-paper-plane input-group-text px-2 text-sm bg-success text-white d-none"
+            id="{{ 'Adminsend'|id_Concat:msg.id }}"
+          ></i>
+        </div>
+        <!-- <p class="card-text text-end text-sm my-0">{{ msg.reply.msg }}</p> -->
+        <div class="d-flex mx-2 justify-content-end text-muted my-1 text-xs">
+          {% if user.is_superuser %}
+          <div class="AdminEdit px-2 hover-effect" id="{{ 'REdit'|id_Concat:msg.id }}"><i class="fa-solid fa-pen"></i></div>
+          <div class="AdminDel px-2 hover-effect text-danger" id="{{ 'RDel'|id_Concat:msg.id }}"><i class="fa-solid fa-trash-can"></i></div>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+      <!-- {% if user.is_superuser %}
+       <div class="d-flex justify-content-center">
+        <div class="mx-2">
+          <button class="adminreply btn btn-primary text-xs" id="{{ 'Dis'|id_Concat:msg.id }}"><i class="fa-solid fa-reply"></i> Post Reply</button>
+        </div>
+      </div> 
+      {% endif %} -->
+    </div>
+
+    {% else %} {% if msg.user == request.user or request.user.is_superuser %}
+    <div class="p-2 border bg-private">
+      <div class="text-start ms-3">
+        <h5 class="card-title">
+          <span class="fw-bold text-sm text-orangefamily">{{msg.user.username}}</span>
+          <span class="text-xs text-black-50"> <i class="fa-solid fa-clock"></i> {{msg.Updated_time}} &nbsp;<i class="fa-solid fa-shield"></i></span>
+        </h5>
+        <div class="input-group position-relative">
+          <input
+            type="text"
+            class="ps-2 text-sm my-0 pe-2 form-control-plaintext w-75"
+            value="{{msg.comment}}"
+            id="{{ 'MsgBox'|id_Concat:msg.id }}"
+            readonly
+          />
+          <i
+            class="send fa-solid fa-paper-plane input-group-text px-2 text-sm bg-success text-white d-none"
+            id="{{ 'Usersend'|id_Concat:msg.id }}"
+          ></i>
+        </div>
+        <!-- <input class="card-text ps-2 text-sm my-0 form-control-plaintext" value="{{msg.comment}}" id="{{ 'MsgBox'|id_Concat:msg.id }}" readonly /> -->
+        <div class="d-flex mx-2 text-muted text-xs">
+          {% if msg.user == request.user %}
+
+          <div class="UserEdit px-2 hover-effect" id="{{ 'Edit'|id_Concat:msg.id }}"><i class="fa-solid fa-pen"></i></div>
+          <div class="ComDel px-2 hover-effect text-danger" id="{{ 'Del'|id_Concat:msg.id }}"><i class="fa-solid fa-trash-can"></i></div>
+          {% endif %} {% if user.is_superuser %}
+          <div class="Adminreply px-2 hover-effect" id="{{ 'Rep'|id_Concat:msg.id }}"><i class="fa-solid fa-reply"></i></div>
+
+          {% endif %}
+        </div>
+        {% if user.is_superuser %}
+
+        <div class="mx-2 d-flex text-sm align-items-center w-75 my-2 d-none" id="{{ 'replydiv'|id_Concat:msg.id }}">
+          <div class="input-group position-relative">
+            <input type="text" class="form-control ps-4 pe-2 text-sm border-0 border-bottom border-success" id="{{ 'AdRepl'|id_Concat:msg.id }}" />
+            <i
+              class="send fa-solid fa-paper-plane input-group-text end-0 px-2 me-3 text-sm bg-success text-white"
+              id="{{ 'send'|id_Concat:msg.id }}"
+            ></i>
+          </div>
+          <label for="{{ 'AdRepl'|id_Concat:msg.id }}" class="form-label text-sm text-success fw-bold position-absolute px-1 mx-2">Reply</label>
+        </div>
+        {% endif %}
+      </div>
+      {% if not msg.reply %} {% else %}
+      <div class="text-end me-3">
+        <h5 class="card-title">
+          <span class="fw-bold text-sm text-success">OverToonZ Admin</span>
+          <span class="text-xs text-black-50"> <i class="fa-solid fa-clock"></i> {{ msg.reply.time|timealert }} </span>
+        </h5>
+        <div class="text-end input-group position-relative">
+          <input
+            type="text"
+            class="ps-2 text-sm my-0 pe-2 form-control-plaintext"
+            value="{{ msg.reply.msg }}"
+            id="{{ 'AdMsgBox'|id_Concat:msg.id }}"
+            readonly
+            style="text-align: end; width: 100%"
+          />
+          <i
+            class="send fa-solid fa-paper-plane input-group-text px-2 text-sm bg-success text-white d-none"
+            id="{{ 'Adminsend'|id_Concat:msg.id }}"
+          ></i>
+        </div>
+
+        <div class="d-flex mx-2 justify-content-end text-muted my-1 text-xs">
+          {% if user.is_superuser %}
+          <div class="AdminEdit px-2 hover-effect" id="{{ 'REdit'|id_Concat:msg.id }}"><i class="fa-solid fa-pen"></i></div>
+          <div class="AdminDel px-2 hover-effect text-danger" id="{{ 'RDel'|id_Concat:msg.id }}"><i class="fa-solid fa-trash-can"></i></div>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+    {% endif %} {% endif %} {% endfor %}
+
+    <div class="d-flex">
+      <div class="">
+        <button class="btn btn-primary text-sm" data-bs-toggle="modal" data-bs-target="#Addissue"><i class="fa-solid fa-plus"></i> Add Issues</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="Addissue">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Issues</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form class="container" action="" method="post">
+        {% csrf_token %}
+        <div class="modal-body">
+          <div class="mb-3 d-flex justify-content-start align-items-center">
+            <div class="flex-basis-auto"><label for="res_as2" class="form-label">Responsing as </label></div>
+            <div class="flex-basis-auto mx-auto">
+              <input
+                type="text"
+                class="form-control-plaintext text-success m-0 p-0"
+                id="res_as2"
+                name="User"
+                readonly
+                value="{{ userinfo.username }}"
+              />
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="select4" class="form-label">Post as </label>
+            <select class="form-select" aria-label="Default select example" name="View" id="select4" aria-describedby="Viewhelp2">
+              <option value="Public">Public</option>
+              <option value="Private">Private</option>
+            </select>
+            <div id="Viewhelp2" class="form-text">if you select private, Admin only view that Message.</div>
+          </div>
+          <div class="mb-3">
+            <label for="webiss" class="form-label">Say your Issues here </label>
+            <textarea type="text" class="form-control" id="webiss" name="Comments" aria-describedby="rechelp4" rows="3"></textarea>
+            <div id="rechelp4" class="form-text">You can say about issues in our websites functions,Anime and it's Episodes.</div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" name="Issuesweb">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
