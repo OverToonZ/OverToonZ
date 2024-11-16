@@ -41,7 +41,7 @@ STATICFILES_FINDERS = [
 ]
 
 COMPRESS_ROOT = STATIC_ROOT  # Ensure compression happens within the static root
-COMPRESS_ENABLED = True
+COMPRESS_ENABLED = False
 COMPRESS_STORAGE = 'compressor.storage.CompressorFileStorage'
 COMPRESS_OUTPUT_DIR = 'CACHE'
 
