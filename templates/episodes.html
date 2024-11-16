@@ -1,0 +1,237 @@
+{% extends "_base.html" %} {% load static %} {% load custom_function %} {% block title %}
+<title>Episodes</title>
+{% endblock title %} {% block content %}
+<body class="bgbodymain container">
+  {% include 'nav.html' %}
+
+  <div class="container-fluid py-2">
+    <div>
+      <span>
+        <a href="{% url 'seasons' title|replace_to_hypen %}" class="text-danger"><i class="fa-solid fa-chevron-left fa-lg"></i> Back </a>
+      </span>
+    </div>
+    <div class="row justify-content-center align-items-center position-relative">
+      <div class="col-12 text-center">
+        <img src="{{ banner }}" class="img-fluid" alt="Banner Image" />
+      </div>
+      <div class="position-absolute bottom-0">
+        <h2 class="text-center text-white bg-dark px-2 py-1 fw-bold mx-auto w-25 text" style="--bs-bg-opacity: 0.5">Season {{season}} - Episodes</h2>
+      </div>
+    </div>
+  </div>
+  <section class="mx-auto my-3 content-control">
+    <!-- <div class="text-center mt-2 d-flex justify-content-center">
+      <h2 class="text-center text-base text-white bg-primary px-2 py-1 fw-bold">Episodes</h2>
+    </div> -->
+    <!-- embed player  -->
+    <div class="container mt-3">
+      <div class="row justify-content-center">
+        <div class="col-md-8 alert alert-warning alert-dismissible fade show d-none" role="alert" id="alertbar">
+          <strong><i class="fa-solid fa-circle-info fa-sm"></i></strong> <span id="errmsg"></span>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-md-8 position-relative bg-frame py-2">
+          <button class="btn navigation-btn prev-btn text-white" id="PrevBtn"><i class="fa-solid fa-chevron-left fa-2xl"></i></button>
+          <div class="video-container">
+            <iframe
+              src="https://mega.nz/embed/hHM2CYBI#jgT7ZvFLBIVsCYvZw41kTjaUdOJAAwt5mnYOxq7_Xtc!1a"
+              frameborder="0"
+              name="episodesframe"
+              id="episodeiframe"
+              data-current="{{ title|id_Concat:'S01EP00' }}"
+              allowfullscreen
+              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+            ></iframe>
+          </div>
+          <button class="btn navigation-btn next-btn text-white" id="NextBtn"><i class="fa-solid fa-chevron-right fa-2xl"></i></button>
+        </div>
+      </div>
+
+      <div class="row justify-content-center d-none" id="infobar">
+        <div class="col-md-8 text-start bg-frame px-2 pt-1 pb-2">
+          <div class="d-flex flex-wrap justify-content-between text-center">
+            <div id="EpisodeName" class="px-3 fw-bold text-lg">It's Like a Game</div>
+            <div id="Anime" class="px-3 text-black-50 text-sm">{{title|replace_to_space}}</div>
+          </div>
+          <div class="px-3">
+            <div class="text-xs text-black-50"><span id="Season">Season 1</span> | Episode <span id="EpisodeNo">1</span></div>
+            <div class="text-sm"><i class="fa-solid fa-eye fa-sm"></i> <span id="Views"> 122 </span> Views</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container mt-3 content-control">
+      <div class="text-center mb-3">
+        <span class="text-white bg-primary p-1 rounded-sm my-2 text-base px-2 fw-semibold">Episode List</span>
+      </div>
+      <div class="row-episode row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 rows-cols-xl-8">
+        <!-- single Card -->
+        {% if is_episodes %} {% for epicontent in episodes_list %}
+        <div
+          class="episode col d-flex align-items-stretch px-2 my-2 mx-md-2 justify-content-center position-relative"
+          id="{{ title|id_Concat:epicontent.code }}"
+        >
+          <a href="{{ epicontent.episode_link }}" target="episodesframe">
+            <div class="card bg-secondary text-white h-100" style="width: 10rem; border-radius: 0px; --bs-bg-opacity: 0.7">
+              <div class="card-header d-flex justify-content-between align-items-center py-0 px-0">
+                <span class="px-1 text-start rounded text-xs">EP{{ forloop.counter|fill }}</span>
+
+                <span class="px-1 text-end rounded text-xs fw-bolder">{{epicontent.static_count}}</span>
+              </div>
+              <div class="h-50 my-1 border-0 px-2">
+                <img src="{{ epicontent.episode_cover }}" class="card-img-top" alt="Cover" />
+              </div>
+
+              <div class="card-body m-0 p-0 mt-3">
+                <h5 class="fs-6 px-2">Episode {{ epicontent.episode|fill }}</h5>
+              </div>
+              <div class="epidata card-body position-absolute d-none bg-dark text-white w-100 bottom-0">
+                <h5 class="text-sm text-center m-0 p-0 mb-1">Episode {{ epicontent.episode|fill }}</h5>
+                <p class="text-xs text-center text-white-50 m-0 p-0">{{ epicontent.episode_title }}</p>
+              </div>
+            </div>
+          </a>
+        </div>
+        {% endfor %} {% else %}
+        <div class="text-center col-12 text-muted mx-auto text-lg">No Episodes Found</div>
+        {% endif %}
+        <!-- Card end  -->
+      </div>
+    </div>
+  </section>
+  <script>
+    $(document).ready(function () {
+      $(".episode").click(function () {
+        var code = $(this).attr("id");
+        $.ajax({
+          url: "#",
+          type: "POST",
+          data: {
+            Id_Code: code,
+            info: "EpisodeViews",
+            csrfmiddlewaretoken: "{{ csrf_token }}",
+          },
+          success: function (response) {
+            const result = response.EpisodeData;
+            $("#episodeiframe").attr("data-current", code);
+            for (const key in result) {
+              $(`#${key}`).html(result[key]);
+            }
+            if ($("#infobar").hasClass("d-none")) {
+              $("#infobar").removeClass("d-none");
+            }
+
+            document.getElementById("episodeiframe").scrollIntoView({ behavior: "smooth" });
+          },
+          error: function (response) {
+            console.log("Error:", response);
+          },
+        });
+      });
+
+      $("#NextBtn").click(function () {
+        var current = $("#episodeiframe").attr("data-current");
+
+        $.ajax({
+          url: "#",
+          type: "POST",
+          data: {
+            CurrentVideo: current,
+            info: "NextEpisode",
+            csrfmiddlewaretoken: "{{ csrf_token }}",
+          },
+          success: function (response) {
+            const result = response.NextData;
+            for (const key in result) {
+              if (key === "src") {
+                $("#episodeiframe").attr("src", result[key]);
+              } else if (key === "curData") {
+                $("#episodeiframe").attr("data-current", result[key]);
+              } else if (key === "err") {
+                if (result[key] === true) {
+                  if ($("#alertbar").hasClass("d-none")) {
+                    $("#alertbar").removeClass("d-none");
+                  }
+                  $("#errmsg").html("You playing first episode of this season. ");
+                } else {
+                  if (!$("#alertbar").hasClass("d-none")) {
+                    $("#alertbar").addClass("d-none");
+                  }
+                }
+              } else {
+                $(`#${key}`).html(result[key]);
+              }
+            }
+            if ($("#infobar").hasClass("d-none")) {
+              $("#infobar").removeClass("d-none");
+            }
+
+            document.getElementById("episodeiframe").scrollIntoView({ behavior: "smooth" });
+          },
+          error: function (response) {
+            console.log("Error:", response);
+          },
+        });
+      });
+
+      $("#PrevBtn").click(function () {
+        var curdata = $("#episodeiframe").attr("data-current");
+        console.log("Current:", curdata);
+        $.ajax({
+          url: "#",
+          type: "POST",
+          data: {
+            CurVideo: curdata,
+            info: "PrevEpisode",
+            csrfmiddlewaretoken: "{{ csrf_token }}",
+          },
+          success: function (response) {
+            const result = response.PrevData;
+            for (const key in result) {
+              if (key === "src") {
+                $("#episodeiframe").attr("src", result[key]);
+              } else if (key === "curData") {
+                $("#episodeiframe").attr("data-current", result[key]);
+                console.log("Current:", result[key]);
+              } else if (key === "err") {
+                if (result[key] === true) {
+                  if ($("#alertbar").hasClass("d-none")) {
+                    $("#alertbar").removeClass("d-none");
+                  }
+                  $("#errmsg").html(" You playing last episode of this season. ");
+                } else {
+                  if (!$("#alertbar").hasClass("d-none")) {
+                    $("#alertbar").addClass("d-none");
+                  }
+                }
+              } else {
+                $(`#${key}`).html(result[key]);
+              }
+            }
+            if ($("#infobar").hasClass("d-none")) {
+              $("#infobar").removeClass("d-none");
+            }
+
+            document.getElementById("episodeiframe").scrollIntoView({ behavior: "smooth" });
+          },
+          error: function (response) {
+            console.log("Error:", response);
+          },
+        });
+      });
+
+      $(".episode").hover(
+        function () {
+          $(this).find(".epidata").removeClass("d-none").css("transform", "translateY(0)");
+        },
+        function () {
+          $(this).find(".epidata").addClass("d-none").css("transform", "translateY(75%)");
+        }
+      );
+    });
+  </script>
+</body>
+{% endblock content %}

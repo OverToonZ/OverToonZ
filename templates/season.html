@@ -1,0 +1,117 @@
+{% extends "_base.html" %} {% load static %} {% load custom_function %} {% block title %}
+<title>Seasons</title>
+{% endblock title %} {% block content %}
+<body class="bgbodymain container font-Roboto">
+  {% include 'nav.html' %}
+  <div>
+    <div class="py-2">
+      <div>
+        <span>
+          <a href="{% url 'anime' %}" class="text-danger"><i class="fa-solid fa-chevron-left fa-lg"></i> Back </a>
+        </span>
+      </div>
+
+      <div class="row">
+        <div class="bannerdiv col-12 col-sm-11 col-md-10 col-lg-8 mx-auto">
+          <div class="card text-center mx-auto">
+            <div class="card-body w-100 border-0 m-0 p-0 position-relative bg-white">
+              <img src="{{ AnimeData.banner }}" class="banner img-fluid h-auto w-100" alt="Banner Image" />
+              <div
+                class="container despdown card-body my-1 text-center text-white fs-5 fw-bold position-absolute bottom-0 d-flex align-items-center justify-content-center mx-auto"
+              >
+                <div class="card-title w-100 border-0 m-0 bg-dark text" style="--bs-bg-opacity: 0.4">{{title}} Seasons</div>
+              </div>
+              <div class="bannerdesp card-body m-0 p-0 d-none position-absolute bottom-0 w-100">
+                <div class="col-12 position-absolute bottom-0" style="background-color: rgba(0, 0, 0, 0.689)">
+                  <h2 class="text-sm text-center text-white px-2 pt-1 fw-semibold mx-auto w-75">{{title}} Seasons</h2>
+                  <div class="despdiv text-white pb-1 px-2 mx-1 m-0">{{AnimeData.description}}</div>
+                </div>
+              </div>
+            </div>
+            <!-- <br class="br" /> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3 mx-auto content-control mt-3">
+    
+    {% for Seasondata in Season %}
+    <div class="col d-flex flex-wrap align-items-stretch justify-content-center m-0 p-0">
+      <a href="{% url 'episodes' title|replace_to_hypen Seasondata.season_count %}">
+        <div class="card text-center bg-season">
+          <div class="card-header d-flex justify-content-between align-items-center py-1 px-1">
+            <span class="p-1 bg-warning text-white text-start rounded me-2 text-xs"># {{ forloop.counter }}</span>
+            <span class="p-1 bg-success text-white text-end rounded text-xs">{{ Seasondata.status }}</span>
+          </div>
+          <div class="m-0 py-1">
+            <img class="card-img-top h-100 w-75 text-center" src="{{ Seasondata.season_cover }}" alt="Card image" />
+          </div>
+          <div class="card-body m-0 p-0">
+            <h4 class="card-title m-0 p-0 fw-bold text-base">Season {{ Seasondata.season_count }}</h4>
+            <p class="card-text m-0 p-0 text-muted text-sm">{{ Seasondata.season_title }}</p>
+          </div>
+          <div class="card-footer text-black-50 bg-white m-0 py-1 text-sm"><i class="fa-solid fa-clock"></i> {{ Seasondata.Updated_time }}</div>
+        </div>
+      </a>
+    </div>
+    {% endfor %}
+  </div> -->
+
+  <div class="row row-episode row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 my-3 content-control d-flex">
+    {% if is_season %} {% for Seasondata in Season %}
+    <div class="col col-season mb-3">
+      <a href="{% url 'episodes' title|replace_to_hypen Seasondata.season_count %}">
+        <div class="card text-center bg-season position-relative">
+          <div class="position-relative">
+            <div class="card-header d-flex justify-content-between align-items-center py-1 px-1">
+              <span class="p-1 bg-warning text-white text-start rounded me-2 text-xs"># {{ forloop.counter }}</span>
+              <span class="p-1 bg-success text-white text-end rounded text-xs">{{ Seasondata.status }}</span>
+            </div>
+            <div class="m-0 py-1">
+              <img class="card-img-top h-100 w-75 text-center" src="{{ Seasondata.season_cover }}" alt="Card image" />
+            </div>
+
+            <div class="name card-body m-0 p-0">
+              <h4 class="card-title m-0 p-0 fw-bold text-base text-center">Season {{ Seasondata.season_count }}</h4>
+            </div>
+            <div class="sdata card-body py-2 p-0 position-absolute bottom-0 d-none bg-white w-100">
+              <h4 class="card-title m-0 p-0 fw-bold text-base text-center">Season {{ Seasondata.season_count }}</h4>
+              <p class="card-text m-0 p-0 text-muted text-sm text-center">{{ Seasondata.season_title }}</p>
+            </div>
+          </div>
+          <div class="card-footer text-black-50 bg-white m-0 py-1 text-sm"><i class="fa-solid fa-clock"></i> {{ Seasondata.Updated_time }}</div>
+        </div>
+      </a>
+    </div>
+    {% endfor %} {% else %}
+    <div class="text-center col-12 text-muted mx-auto text-lg">No Season Found</div>
+    {% endif %}
+  </div>
+</body>
+<script>
+  $(document).ready(function () {
+    $(".bannerdiv").hover(
+      function () {
+        $(".bannerdesp").removeClass("d-none").css("transform", "translateY(0)");
+        $(".despdown").addClass("d-none").css("transform", "translateY(100%)");
+      },
+      function () {
+        $(".bannerdesp").addClass("d-none").css("transform", "translateY(100%)");
+        $(".despdown").removeClass("d-none").css("transform", "translateY(0%)");
+      }
+    );
+    $(".col-season").hover(
+      function () {
+        $(this).find(".sdata").removeClass("d-none").css("transform", "translateY(0)");
+        $(this).find(".name").addClass("d-none").css("transform", "translateY(100%)");
+      },
+      function () {
+        $(this).find(".sdata").addClass("d-none").css("transform", "translateY(100%)");
+        $(this).find(".name").removeClass("d-none").css("transform", "translateY(0%)");
+      }
+    );
+  });
+</script>
+{% endblock %}

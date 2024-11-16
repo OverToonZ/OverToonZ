@@ -1,0 +1,433 @@
+<div class="container d-none" id="modifyAnimeform">
+  <form class="row" action="" method="post">
+    <legend class="mb-1 text-center p-2 mt-3"><span class="bg-info text-white py-1 px-3"> Modify Existing Anime Content</span></legend>
+    {% csrf_token %}
+    <div class="justify-content-center">
+      <!-- inputform  -->
+      <div class="row">
+        <div class="col-11 col-sm-10 col-md-8 col-lg-6 mb-1 mt-2 outline-0">
+          <div class="mb-2">
+            <label for="titleanime" class="form-label">Anime Title :</label>
+            <input list="titlelist" id="titleanime" class="form-control" name="title" placeholder="Anime Title" required />
+            <datalist id="titlelist">
+              {% for names in animelist %}
+              <option>{{names}}</option>
+              {% endfor %}
+            </datalist>
+          </div>
+        </div>
+        <div class="col-11 col-sm-10 col-md-8 col-lg-6 mb-1 mt-2 outline-0">
+          <div class="mb-2">
+            <label for="studio" class="form-label">Production Studio :</label>
+            <input type="text" class="form-control Modifyfield" name="studio" placeholder="Production Studio " id="studio" />
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-11 col-sm-11 col-md-10 col-lg-7 mb-1 mt-2 outline-0">
+          <div class="mb-2">
+            <label for="AnimeImage" class="form-label">Image Url:</label>
+            <input type="url" class="form-control Modifyfield" name="img_url" id="img_src" placeholder="Image URL" />
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-11 col-sm-11 col-md-10 col-lg-7 mb-1 mt-2 outline-0">
+          <div class="mb-2">
+            <label for="AnimeBanner" class="form-label">Banner :</label>
+            <input type="url" class="form-control Modifyfield" id="AnimeBanner" name="img_banner" placeholder="Anime Banner" value=" " />
+          </div>
+        </div>
+      </div>
+
+      <div class="col-11 mb-1 mt-2 outline-0">
+        <div class="row">
+          <div class="col-6 col-lg-4 mb-2">
+            <label for="seasons" class="form-label">Seasons : </label>
+            <input type="number" class="form-control Modifyfield" name="seasons" id="seasons" placeholder="Seasons" />
+          </div>
+          <div class="col-6 col-lg-4 mb-2">
+            <label for="episodes" class="form-label">Episodes: </label>
+            <input type="number" class="form-control Modifyfield" name="episodes" id="episodes" placeholder="Episodes" />
+          </div>
+          <div class="col-8 col-lg-4 mb-2">
+            <label for="avail_lang" class="form-label">Language : </label>
+            <input list="lang" class="form-control Modifyfield" name="avail_lang" id="avail_lang" placeholder="Available Language" />
+            <datalist id="lang">
+              <option value="EG">English</option>
+              <option value="TA">Tamil</option>
+              <option value="HI">Hindi</option>
+              <option value="TE">Telugu</option>
+              <option value="JA">Japanese</option>
+              <option value="KO">Korean</option>
+            </datalist>
+          </div>
+        </div>
+      </div>
+      <div class="col-11 mb-1 mt-2 outline-0">
+        <div class="row">
+          <div class="col mb-2">
+            <label for="rating" class="form-label">Rating : </label>
+            <input type="number" class="form-control Modifyfield" id="rating" name="rating" placeholder="Rating" />
+          </div>
+          <div class="col mb-2">
+            <label for="status" class="form-label">Status: </label>
+            <input list="addstatus" class="form-control Modifyfield" id="status" name="status" placeholder="Anime Status" />
+            <datalist id="addstatus">
+              <option value="Completed">Completed</option>
+              <option value="Ongoing">Ongoing</option>
+              <option value="Maybe Arrive">Maybe Arrive</option>
+            </datalist>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-11 col-md-9 col-lg-7 mb-1 mt-2 outline-0">
+        <div class="mb-2">
+          <label for="genre" class="form-label">Genre : </label>
+          <input type="text" class="form-control Modifyfield" id="genre" name="genre" placeholder="Genre " />
+        </div>
+      </div>
+      <div class="col-11 mb-1 mt-2 outline-0">
+        <div class="mb-2">
+          <label for="MS_desp" class="form-label">Description : </label>
+          <textarea rows="5" class="form-control Modifyfield" id="MS_desp" name="description" placeholder="Description "></textarea>
+        </div>
+      </div>
+      <div class="row justify-content-center mt-4 mb-2 mx-auto">
+        <button
+          type="submit"
+          class="col-4 col-md-3 col-lg-2 ms-1 me-5 bg-primary text-white p-2 rounded border-0 px-2 Modifyfield"
+          name="ModifyAnime"
+        >
+          Modify Anime
+        </button>
+        <button type="reset" class="col-4 col-md-3 col-lg-2 mx-1 bg-danger text-white p-2 rounded border-0 px-2">Cancel</button>
+      </div>
+      <!-- form input  -->
+    </div>
+  </form>
+</div>
+
+<div class="container d-none" id="modifyEpisodeform">
+  <form class="row" action="" method="post">
+    <legend class="mb-1 text-center p-2 mt-3"><span class="bg-info text-white py-1 px-3">Modify Existing Anime Episodes</span></legend>
+    {% csrf_token %}
+    <div class="justify-content-center">
+      <!-- inputform  -->
+      <div class="row">
+        <div class="col-11 col-sm-10 col-md-8 col-lg-6 mb-1 mt-2 outline-0">
+          <div class="mb-2">
+            <label for="animename" class="form-label">Anime Title :</label>
+            <input list="titlelist" id="animename" class="form-control" name="title" placeholder="Anime Title" required />
+            <datalist id="titlelist">
+              {% for names in animelist %}
+              <option>{{names}}</option>
+              {% endfor %}
+            </datalist>
+          </div>
+        </div>
+        <div class="col-11 col-sm-10 col-md-8 col-lg-4 mb-1 mt-2 outline-0">
+          <div class="mb-2">
+            <label for="codes" class="form-label">Episode Code :</label>
+            <input list="codelist" class="form-control" name="Episode Code" placeholder="Episode Code" id="codes" />
+
+            <datalist id="codelist"> </datalist>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-11 mb-1 mt-2 outline-0">
+        <div class="row">
+          <div class="col-5 col-lg-2 mb-2">
+            <label for="seasons_no" class="form-label">Season :</label>
+            <input type="number" class="form-control Modifyfield" name="seasons" id="seasons_no" placeholder="Seasons" />
+          </div>
+          <div class="col-5 col-lg-2 mb-2">
+            <label for="episodes_no" class="form-label">Episode :</label>
+            <input type="number" class="form-control Modifyfield" name="episodes" id="episodes_no" placeholder="Episodes" />
+          </div>
+          <div class="col-10 col-lg-8 mb-2">
+            <label for="episode_name" class="form-label">Episode Title :</label>
+            <input type="text" class="form-control Modifyfield" name="episode_title" placeholder="Episode Title" id="episode_name" />
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-11 col-sm-11 col-md-10 col-lg-9 mb-1 mt-2 outline-0">
+          <div class="mb-2">
+            <label for="episode_cover" class="form-label">Episode Thumbnail Image Url:</label>
+            <input
+              type="url"
+              class="form-control Modifyfield"
+              id="episode_cover"
+              name="episode_cover_url"
+              placeholder="Episode Cover Url"
+              value="https://drive.google.com/thumbnail?id="
+            />
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-11 col-sm-11 col-md-10 col-lg-9 mb-1 mt-2 outline-0">
+          <div class="mb-2">
+            <label for="episode_link" class="form-label">Episode Url:</label>
+            <input
+              type="url"
+              class="form-control Modifyfield"
+              id="episode_link"
+              name="episode_url"
+              placeholder="Episode Url"
+              value="https://drive.google.com/thumbnail?id="
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-center mt-4 mb-2 mx-auto">
+        <button
+          type="submit"
+          class="col-4 col-md-3 col-lg-2 ms-1 me-5 bg-primary text-white p-2 rounded border-0 px-2 Modifyfield"
+          name="ModifyEpisode"
+          value="Modify Episode"
+        >
+          Modify Episode
+        </button>
+        <button type="reset" class="col-4 col-md-3 col-lg-2 mx-1 bg-danger text-white p-2 rounded border-0 px-2">Cancel</button>
+      </div>
+      <!-- form input  -->
+    </div>
+  </form>
+</div>
+
+<div class="container d-none" id="modifySeasonform">
+  <form class="row" action="" method="post">
+    <legend class="mb-1 text-center p-2 mt-3"><span class="bg-info text-white py-1 px-3"> Modify Existing Anime Seasons</span></legend>
+    {% csrf_token %}
+    <div class="justify-content-center">
+      <!-- inputform  -->
+      <div class="row">
+        <div class="col-11 col-sm-10 col-md-8 col-lg-6 mb-1 mt-2 outline-0">
+          <div class="mb-2">
+            <label for="MS_animeTitle" class="form-label">Anime Title :</label>
+            <input list="titlelist" id="MS_animeTitle" class="form-control" name="title" placeholder="Anime Title" required />
+            <datalist id="titlelist">
+              {% for names in animelist %}
+              <option>{{names}}</option>
+              {% endfor %}
+            </datalist>
+          </div>
+        </div>
+
+        <div class="col-11 col-sm-10 col-md-8 col-lg-6 mb-1 mt-2 outline-0">
+          <div class="mb-2">
+            <label for="MS_seasons" class="form-label">Season :</label>
+            <input class="form-control" name="seasons" placeholder="Seasons " id="MS_seasons" list="seasonlist" />
+            <datalist id="seasonlist"> </datalist>
+          </div>
+        </div>
+        <div class="col-11 col-sm-10 col-md-8 col-lg-6 mb-1 mt-2 outline-0">
+          <div class="mb-2">
+            <label for="MS_seasonname" class="form-label">Season Title :</label>
+            <input type="text" class="form-control Modifyfield" name="seasonname" placeholder="Season Name " id="MS_seasonname" />
+          </div>
+        </div>
+      </div>
+
+      <div class="col-11 mb-1 mt-2 outline-0">
+        <div class="row">
+          <div class="col mb-2">
+            <label for="MS_episodes" class="form-label">Episodes: </label>
+            <input type="number" class="form-control Modifyfield" name="episodes" id="MS_episodes" placeholder="Episodes" />
+          </div>
+          <div class="col mb-2">
+            <label for="MS_status" class="form-label">Status: </label>
+            <input list="addstatus" class="form-control Modifyfield" id="MS_status" name="status" placeholder="Anime Status" />
+            <datalist id="addstatus">
+              <option value="Completed">Completed</option>
+              <option value="Ongoing">Ongoing</option>
+              <option value="Maybe Arrive">Maybe Arrive</option>
+            </datalist>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-11 col-sm-11 col-md-10 col-lg-7 mb-1 mt-2 outline-0">
+          <div class="mb-2">
+            <label for="MS_AnimeImage" class="form-label">Season Thumbnail Image Url:</label>
+            <input
+              type="url"
+              class="form-control Modifyfield"
+              name="img_url"
+              id="MS_AnimeImage"
+              placeholder="Image URL"
+              value="https://drive.google.com/thumbnail?id="
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-11 col-sm-11 col-md-10 col-lg-7 mb-1 mt-2 outline-0">
+          <div class="mb-2">
+            <label for="MS_seasonbanner" class="form-label">Season banner Image Url:</label>
+            <input
+              type="url"
+              class="form-control Modifyfield"
+              name="img_ban_url"
+              id="MS_seasonbanner"
+              placeholder="Banner Image URL"
+              value="https://drive.google.com/thumbnail?id="
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-center mt-4 mb-2 mx-auto">
+        <button
+          type="submit"
+          class="col-4 col-md-3 col-lg-2 ms-1 me-5 bg-primary text-white p-2 rounded border-0 px-2 Modifyfield"
+          name="ModifySeason"
+        >
+          Modify Season
+        </button>
+        <button type="reset" class="col-4 col-md-3 col-lg-2 mx-1 bg-danger text-white p-2 rounded border-0 px-2">Cancel</button>
+      </div>
+      <!-- form input  -->
+    </div>
+  </form>
+</div>
+
+<script>
+  $(document).ready(function () {
+    $(".Modifyfield").prop("disabled", true);
+    $("#codes").prop("disabled", true);
+    $("#MS_seasons").prop("disabled", true);
+
+    $("#titleanime").change(function () {
+      const anime = $(this).val();
+      $(".Modifyfield").prop("disabled", true);
+      $.ajax({
+        url: '{% url "operations" %}',
+        type: "POST",
+        data: {
+          selected_anime: anime,
+          formuse: "ModifyAnimeInfo",
+          csrfmiddlewaretoken: "{{ csrf_token }}",
+        },
+        success: function (response) {
+          const res = response.updated_value;
+          for (const key in res) {
+            $(`#${key}`).val(res[key]);
+          }
+          $(".Modifyfield").prop("disabled", false);
+        },
+        error: function (response) {
+          console.log("Error:", response);
+        },
+      });
+    });
+
+    $("#animename").change(function () {
+      const anime = $(this).val();
+      $("#codes").prop("disabled", true);
+      $.ajax({
+        url: '{% url "operations" %}',
+        type: "POST",
+        data: {
+          selected_anime: anime,
+          formuse: "getModifyEpisode",
+          csrfmiddlewaretoken: "{{ csrf_token }}",
+        },
+        success: function (response) {
+          const res = response.updated_value;
+          $("#codelist").empty();
+          for (const key in res) {
+            $("#codelist").append($("<option></option>").attr("value", `${anime}-${res[key]}`));
+          }
+          $("#codes").prop("disabled", false);
+        },
+        error: function (response) {
+          console.log("Error:", response);
+        },
+      });
+    });
+
+    $("#codes").change(function () {
+      const code = $(this).val();
+      $(".Modifyfield").prop("disabled", true);
+      $.ajax({
+        url: '{% url "operations" %}',
+        type: "POST",
+        data: {
+          Selected_Code: code,
+          formuse: "ModifyEpisodeInfo",
+          csrfmiddlewaretoken: "{{ csrf_token }}",
+        },
+        success: function (response) {
+          const res = response.updated_value;
+          for (const key in res) {
+            $(`#${key}`).val(res[key]);
+          }
+          $(".Modifyfield").prop("disabled", false);
+        },
+        error: function (response) {
+          console.log("Error:", response);
+        },
+      });
+    });
+
+    $("#MS_animeTitle").change(function () {
+      const anime = $(this).val();
+      $("#MS_seasons").prop("disabled", true);
+      $.ajax({
+        url: '{% url "operations" %}',
+        type: "POST",
+        data: {
+          selected_anime: anime,
+          formuse: "getModifySeason",
+          csrfmiddlewaretoken: "{{ csrf_token }}",
+        },
+        success: function (response) {
+          const res = response.updated_value;
+          $("#seasonlist").empty();
+          for (const key in res) {
+            $("#seasonlist").append($("<option></option>").attr("value", res[key]));
+          }
+          $("#MS_seasons").prop("disabled", false);
+        },
+        error: function (response) {
+          console.log("Error:", response);
+        },
+      });
+    });
+
+    $("#MS_seasons").change(function () {
+      const anime = $("#MS_animeTitle").val();
+      const season = $(this).val();
+      $(".Modifyfield").prop("disabled", true);
+      $.ajax({
+        url: '{% url "operations" %}',
+        type: "POST",
+        data: {
+          selected_anime: anime,
+          selected_season: season,
+          formuse: "ModifySeasonInfo",
+          csrfmiddlewaretoken: "{{ csrf_token }}",
+        },
+        success: function (response) {
+          const res = response.updated_value;
+          for (const key in res) {
+            $(`#${key}`).val(res[key]);
+          }
+          $(".Modifyfield").prop("disabled", false);
+        },
+        error: function (response) {
+          console.log("Error:", response);
+        },
+      });
+    });
+  });
+</script>

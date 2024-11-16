@@ -1,0 +1,122 @@
+<div class="container d-none" id="removeAnimeform">
+  <form class="row" action="" method="post">
+    <legend class="mb-1 text-center p-2 mt-3"><span class="bg-info text-white py-1 px-3"> Remove Existing Anime Content</span></legend>
+    {% csrf_token %}
+    <div class="justify-content-center">
+      <!-- inputform  -->
+      <div class="row">
+        <div class="col-11 col-sm-10 col-md-8 col-lg-6 mb-1 mt-2 outline-0">
+          <div class="mb-2">
+            <label for="Rem_Animetitle" class="form-label">Anime Title :</label>
+
+            <input list="rem1titlelist" id="Rem_Animetitle" class="form-control" name="title" placeholder="Anime Title" required />
+            <datalist id="rem1titlelist">
+              {% for names in animelist %}
+              <option>{{names}}</option>
+              {% endfor %}
+            </datalist>
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-center mt-4 mb-2 mx-auto">
+        <button type="submit" class="col-4 col-md-3 col-lg-2 ms-1 me-5 bg-primary text-white p-2 rounded border-0 px-2" name="RemoveAnime">
+          Remove Anime
+        </button>
+        <button type="reset" class="col-4 col-md-3 col-lg-2 mx-1 bg-danger text-white p-2 rounded border-0 px-2">Cancel</button>
+      </div>
+      <!-- form input  -->
+    </div>
+  </form>
+</div>
+
+<div class="container d-none" id="removeSeasonform">
+  <form class="row" action="" method="post">
+    <legend class="mb-1 text-center p-2 mt-3"><span class="bg-info text-white py-1 px-3"> Remove Existing Anime Seasons</span></legend>
+    {% csrf_token %}
+    <div class="justify-content-center">
+      <!-- inputform  -->
+      <div class="row">
+        <div class="col-11 col-sm-10 col-md-8 col-lg-6 mb-1 mt-2 outline-0">
+          <div class="mb-2">
+            <label for="Sea_Animetitle" class="form-label">Anime Title :</label>
+
+            <input list="remtitlelist" id="Sea_Animetitle" class="form-control" name="title" placeholder="Anime Title" required />
+            <datalist id="remtitlelist">
+              {% for names in animelist %}
+              <option>{{names}}</option>
+              {% endfor %}
+            </datalist>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-11 col-sm-10 col-md-8 col-lg-6 mb-1 mt-2 outline-0">
+          <div class="mb-2">
+            <label for="Sea_seasonno" class="form-label">Season No :</label>
+            <input type="number" class="form-control" id="Sea_seasonno" name="seasons" placeholder="Season" />
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-center mt-4 mb-2 mx-auto">
+        <button type="submit" class="col-4 col-md-3 col-lg-2 ms-1 me-5 bg-primary text-white p-2 rounded border-0 px-2" name="RemoveSeason">
+          Remove Season
+        </button>
+        <button type="reset" class="col-4 col-md-3 col-lg-2 mx-1 bg-danger text-white p-2 rounded border-0 px-2">Cancel</button>
+      </div>
+      <!-- form input  -->
+    </div>
+  </form>
+</div>
+
+<div class="container d-none" id="removeEpisodeform">
+  <form class="row" action="" method="post">
+    <legend class="mb-1 text-center p-2 mt-3"><span class="bg-info text-white py-1 px-3"> Remove Existing Anime Episodes</span></legend>
+    {% csrf_token %}
+    <div class="justify-content-center">
+      <!-- inputform  -->
+      <div class="row">
+        <div class="col-11 col-sm-10 col-md-8 col-lg-6 mb-1 mt-2 outline-0">
+          <div class="mb-2">
+            <label for="Epi_Animetitle" class="form-label">Anime Title :</label>
+
+            <input list="rem2titlelist" id="Epi_Animetitle" class="form-control" name="title" placeholder="Anime Title" required />
+            <datalist id="rem2titlelist">
+              {% for names in animelist %}
+              <option>{{names}}</option>
+              {% endfor %}
+            </datalist>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-11 col-sm-10 col-md-8 col-lg-6 mb-1 mt-2 outline-0">
+          <div class="mb-2">
+            <label for="Epi_seasonno" class="form-label">Season No :</label>
+            <input type="number" class="form-control" id="Epi_seasonno" name="seasons" placeholder="Season" />
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-11 col-sm-10 col-md-8 col-lg-6 mb-1 mt-2 outline-0">
+          <div class="mb-2">
+            <label for="Epi_episodeNo" class="form-label">Episode No :</label>
+            <input type="number" class="form-control" id="Epi_episodeNo" name="episodes" placeholder="Episode" />
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-center mt-4 mb-2 mx-auto">
+        <button type="submit" class="col-4 col-md-3 col-lg-2 ms-1 me-5 bg-primary text-white p-2 rounded border-0 px-2" name="RemoveEpisode">
+          Remove Episode
+        </button>
+        <button type="reset" class="col-4 col-md-3 col-lg-2 mx-1 bg-danger text-white p-2 rounded border-0 px-2">Cancel</button>
+      </div>
+      <!-- form input  -->
+    </div>
+  </form>
+</div>

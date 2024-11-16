@@ -1,0 +1,108 @@
+{% extends "_base.html" %} {% load static %} {% block title %}
+<title>Anime</title>
+{% endblock title %} {% block content %}
+<body class="bgbodymain container font-Roboto">
+  {% include 'nav.html' %}
+  <div class="container d-flex flex-wrap justify-content-center mt-2 mx-auto">
+    <div class="dropdown mx-3 my-1">
+      <button type="button" class="btn btn-primary dropdown-toggle flex-fill" data-bs-toggle="dropdown">
+        <i class="fa-solid fa-plus me-1 text-white"></i> Add
+      </button>
+      <ul class="dropdown-menu">
+        <li><button class="dropdown-item" type="button" value="Add New Anime" id="addAnime" onclick="operation(this.id)">Anime</button></li>
+        <li><button class="dropdown-item" type="button" value="Add New Season" id="addSeason" onclick="operation(this.id)">Season</button></li>
+        <li><button class="dropdown-item" type="button" value="Add New Episode" id="addEpisode" onclick="operation(this.id)">Episode</button></li>
+        <li>
+          <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#Bulkupdate">Bulk Upload</button>
+        </li>
+      </ul>
+    </div>
+
+    <div class="dropdown mx-3 my-1">
+      <button type="button" class="btn bg-orange dropdown-toggle text-white flex-fill" data-bs-toggle="dropdown">
+        <i class="fa-solid fa-file-pen me-1 text-white"></i> Modify
+      </button>
+      <ul class="dropdown-menu">
+        <li><button class="dropdown-item" type="button" value="Modify Anime" id="modifyAnime" onclick="operation(this.id)">Anime</button></li>
+        <li><button class="dropdown-item" type="button" value="Modify Season" id="modifySeason" onclick="operation(this.id)">Season</button></li>
+        <li><button class="dropdown-item" type="button" value="Modify Episode" id="modifyEpisode" onclick="operation(this.id)">Episode</button></li>
+      </ul>
+    </div>
+
+    <div class="dropdown mx-3 my-1">
+      <button type="button" class="btn btn-danger dropdown-toggle flex-fill" data-bs-toggle="dropdown">
+        <i class="fa-solid fa-trash-can me-1 text-white"></i> Delete
+      </button>
+      <ul class="dropdown-menu">
+        <li><button class="dropdown-item" type="button" value="Remove Anime" id="removeAnime" onclick="operation(this.id)">Anime</button></li>
+        <li><button class="dropdown-item" type="button" value="Remove Season" id="removeSeason" onclick="operation(this.id)">Season</button></li>
+        <li><button class="dropdown-item" type="button" value="Remove Episode" id="removeEpisode" onclick="operation(this.id)">Episode</button></li>
+      </ul>
+    </div>
+  </div>
+  <div class="modal" id="Bulkupdate">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Bulk Upload</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <form class="container" action="" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="modal-body">
+            <div class="mb-3 text-muted text-xs">
+              This only for Episode and Season Bulk Upload and json file in correct format has in sample json file is given.<br />
+              <a href="{% static 'json/Episode_Json.json' %}" class="mx-1 text-xs" download> &#x1F847; Episode Sample JSON File </a><br />
+              <a href="{% static 'json/Season_Json.json' %}" class="mx-1 text-xs" download> &#x1F847; Season Sample JSON File </a>
+            </div>
+
+            <div class="mb-3">
+              <label for="animein" class="form-label fw-bold">Anime </label>
+
+              <input
+                list="modaltitlelist"
+                id="animein"
+                class="form-control"
+                name="anime"
+                aria-describedby="help1"
+                placeholder="Anime Title"
+                required
+              />
+              <datalist id="modaltitlelist">
+                {% for names in animelist %}
+                <option>{{names}}</option>
+                {% endfor %}
+              </datalist>
+              <div id="help1" class="form-text text-xs">Your file only episodes for this anime .....</div>
+            </div>
+            <div class="mb-3">
+              <label for="bulkid" class="form-label fw-bold">Bulk Update For : </label>
+              <input list="bulkfor" class="form-control" id="bulkid" name="BulkFor" placeholder="Bulk Update" />
+              <datalist id="bulkfor">
+                <option value="Episodes"></option>
+                <option value="Seasons"></option>
+              </datalist>
+            </div>
+            <div class="mb-3">
+              <label for="formFile" class="form-label fw-bold">Add File </label>
+              <input class="form-control" type="file" id="formFile" name="jsonfile" accept=".json" aria-describedby="help" />
+              <div id="help" class="form-text text-xs">Upload Json File .....</div>
+            </div>
+            <div class="mb-3 form-check">
+              <input class="form-check-input" type="checkbox" value="" id="check" />
+              <label class="form-check-label text-sm" for="check"> Ensure that file are in correct format. </label>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="reset" class="btn btn-danger">Reset</button>
+            <button type="submit" class="btn btn-primary" name="BulkUpdate">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% include 'add.html' %} {% include 'modify.html' %} {% include 'remove.html' %}
+  <script type="text/javascript" src="{% static 'js/index.js' %}"></script>
+</body>
+{% endblock %}
