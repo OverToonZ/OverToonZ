@@ -46,7 +46,26 @@ COMPRESS_ROOT = BASE_DIR / 'static'
 
 COMPRESS_ENABLED = True
 
-STATICFILES_FINDERS = ('compressor.finders.CompressorFinder',)
+#STATICFILES_FINDERS = ('compressor.finders.CompressorFinder',)
+
+# Enable Django Compressor
+INSTALLED_APPS += ['compressor']
+
+# Set the STATICFILES_FINDERS to include CompressorFinder
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+]
+
+# Optional: Set COMPRESS_ENABLED to control compression
+COMPRESS_ENABLED = True  # Automatically set to False if DEBUG = True
+
+# Optional: Backend for Compressor (default is 'django.core.cache.backends.locmem.LocMemCache')
+COMPRESS_STORAGE = 'compressor.storage.CompressorFileStorage'
+
+# Optional: Output directory for compressed files
+COMPRESS_OUTPUT_DIR = 'CACHE'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
