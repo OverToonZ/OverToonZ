@@ -21,7 +21,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-u6tcpui#(#mkkkr00u^evxzeq!0%olf#$+b7jy$=0j7=&a3vxj'
+# SECRET_KEY = 'django-insecure-u6tcpui#(#mkkkr00u^evxzeq!0%olf#$+b7jy$=0j7=&a3vxj'
+SECRET_KEY = os.environ.get('APP_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -79,17 +80,27 @@ WSGI_APPLICATION = 'overtoonz.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'b6nkxtnj0xc6npzvhdel',
+#         'USER':'usfqhv9skfkconeu',
+#         'PASSWORD':'DdDh8usydIgZzGB6evC9',
+#         'HOST':'b6nkxtnj0xc6npzvhdel-mysql.services.clever-cloud.com',
+#         'PORT':3306,
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'b6nkxtnj0xc6npzvhdel',
-        'USER':'usfqhv9skfkconeu',
-        'PASSWORD':'DdDh8usydIgZzGB6evC9',
-        'HOST':'b6nkxtnj0xc6npzvhdel-mysql.services.clever-cloud.com',
+        'NAME': os.environ.get('DATABASE_NAME'),
+        'USER':'os.environ.get('DATABASE_USER')',
+        'PASSWORD':'os.environ.get('DATABASE_KEY')',
+        'HOST':'os.environ.get('HOST')',
         'PORT':3306,
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
